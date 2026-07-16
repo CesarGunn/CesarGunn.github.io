@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacidad — Desarrollos CesarGunn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --bg-alt: #111114;
+            --text: #ffffff;
+            --text-secondary: #8a8a8e;
+            --accent: #3b82f6;
+            --border: rgba(255,255,255,0.06);
+            --radius: 16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { background: var(--bg); scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+            background: var(--bg); color: var(--text);
+            line-height: 1.7; -webkit-font-smoothing: antialiased;
+            max-width: 720px; margin: 0 auto; padding: 6rem 2rem 4rem;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 0.85rem; margin-bottom: 4rem; transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--text); }
+        .back-link svg { transition: transform 0.2s; }
+        .back-link:hover svg { transform: translateX(-3px); }
+        h1 {
+            font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 700;
+            letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem;
+        }
+        .updated {
+            font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 3rem;
+        }
+        h2 {
+            font-size: 1.2rem; font-weight: 600; letter-spacing: -0.015em;
+            margin-top: 2.5rem; margin-bottom: 0.75rem;
+        }
+        p, li {
+            font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0.75rem;
+        }
+        ul { padding-left: 1.25rem; margin-bottom: 1.5rem; }
+        li { margin-bottom: 0.4rem; }
+        .app-list {
+            list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem;
+        }
+        .app-list li {
+            background: var(--bg-alt); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 1.5rem;
+        }
+        .app-list li strong { display: block; color: var(--text); margin-bottom: 0.3rem; }
+        .app-list li span { font-size: 0.85rem; color: var(--text-secondary); }
+        hr {
+            border: none; border-top: 1px solid var(--border);
+            margin: 3rem 0;
+        }
+        .app-cards {
+            display: flex; flex-direction: column; gap: 1rem;
+        }
+        .app-card {
+            background: var(--bg-alt); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 2rem;
+            text-decoration: none; color: var(--text); display: block;
+            transition: border-color 0.3s ease;
+        }
+        .app-card:hover { border-color: rgba(255,255,255,0.15); }
+        .app-card h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .app-card p { font-size: 0.88rem; color: var(--text-secondary); }
+        .app-card .arrow { color: var(--accent); margin-top: 1rem; font-size: 0.85rem; }
+        footer {
+            margin-top: 4rem; padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.78rem; color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Volver al inicio
+    </a>
+
+    <h1>Avisos de Privacidad</h1>
+    <p style="color:var(--text-secondary);margin-bottom:2rem;">Selecciona una aplicación para ver su Aviso de Privacidad completo.</p>
+
+    <div class="app-cards">
+        <a href="privacy-paynani.html" class="app-card">
+            <h2>Paynani API REST Client</h2>
+            <p>Cliente REST nativo para probar APIs HTTP y HTTPS. Sin registro, sin recolección de datos.</p>
+            <div class="arrow">Ver Aviso de Privacidad →</div>
+        </a>
+        <a href="privacy-maestro.html" class="app-card">
+            <h2>Maestro del Parley</h2>
+            <p>Aplicación deportiva de predicciones, resultados y estadísticas en vivo.</p>
+            <div class="arrow">Ver Aviso de Privacidad →</div>
+        </a>
+    </div>
+
+    <hr>
+    <footer>
+        © 2026 Desarrollos CesarGunn — Todos los derechos reservados.
+    </footer>
+</body>
+</html>

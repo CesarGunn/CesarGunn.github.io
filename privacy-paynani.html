@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacidad — Paynani API REST Client — Desarrollos CesarGunn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0b; --bg-alt: #111114; --text: #ffffff;
+            --text-secondary: #8a8a8e; --accent: #3b82f6;
+            --border: rgba(255,255,255,0.06); --radius: 16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { background: var(--bg); scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+            background: var(--bg); color: var(--text);
+            line-height: 1.7; -webkit-font-smoothing: antialiased;
+            max-width: 720px; margin: 0 auto; padding: 6rem 2rem 4rem;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 0.85rem; margin-bottom: 4rem; transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--text); }
+        .back-link svg { transition: transform 0.2s; }
+        .back-link:hover svg { transform: translateX(-3px); }
+        h1 {
+            font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 700;
+            letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.5rem;
+        }
+        .updated {
+            font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 3rem;
+        }
+        h2 {
+            font-size: 1.2rem; font-weight: 600; letter-spacing: -0.015em;
+            margin-top: 2.5rem; margin-bottom: 0.75rem;
+        }
+        p, li {
+            font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0.75rem;
+        }
+        ul { padding-left: 1.25rem; margin-bottom: 1.5rem; }
+        li { margin-bottom: 0.4rem; }
+        hr {
+            border: none; border-top: 1px solid var(--border); margin: 3rem 0;
+        }
+        footer {
+            margin-top: 4rem; padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.78rem; color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Volver al inicio
+    </a>
+
+    <h1>Paynani API REST Client</h1>
+    <p class="updated">Aviso de Privacidad — Última actualización: 15 de julio de 2026</p>
+
+    <h2>1. Introducción</h2>
+    <p>En <strong>Desarrollos CesarGunn</strong> respetamos la privacidad de nuestros usuarios. Este Aviso de Privacidad explica cómo funciona la aplicación <strong>Paynani API REST Client</strong> respecto al tratamiento de la información.</p>
+    <p>Nuestra prioridad es ofrecer una herramienta para probar y consumir servicios REST de forma segura y completamente local.</p>
+
+    <h2>2. Información que recopilamos</h2>
+    <p><strong>Paynani API REST Client no recopila información personal de los usuarios.</strong></p>
+    <p>La aplicación:</p>
+    <ul>
+        <li>No solicita registro.</li>
+        <li>No requiere iniciar sesión.</li>
+        <li>No solicita nombre.</li>
+        <li>No solicita correo electrónico.</li>
+        <li>No solicita número telefónico.</li>
+        <li>No solicita ubicación.</li>
+        <li>No solicita acceso a contactos.</li>
+        <li>No solicita acceso a fotografías.</li>
+        <li>No solicita acceso a archivos personales (salvo que el usuario decida importar o exportar información mediante las funciones propias de la aplicación).</li>
+        <li>No recopila información biométrica.</li>
+    </ul>
+
+    <h2>3. Información utilizada durante el funcionamiento</h2>
+    <p>La aplicación permite realizar solicitudes HTTP como:</p>
+    <ul>
+        <li>GET</li>
+        <li>POST</li>
+        <li>PUT</li>
+        <li>PATCH</li>
+        <li>DELETE</li>
+        <li>Otros métodos compatibles con el protocolo HTTP.</li>
+    </ul>
+    <p>Toda la información utilizada para construir las solicitudes (URL, encabezados, parámetros, cuerpo de la petición y respuestas recibidas) es procesada localmente en el dispositivo del usuario.</p>
+    <p><strong>Desarrollos CesarGunn no recibe, almacena ni tiene acceso a dicha información.</strong></p>
+
+    <h2>4. Almacenamiento de datos</h2>
+    <p>Las configuraciones o datos que el usuario decida conservar dentro de la aplicación permanecen únicamente en el dispositivo donde se utiliza.</p>
+    <p>No existe sincronización con servidores propios.</p>
+    <p>No existe almacenamiento en la nube administrado por Desarrollos CesarGunn.</p>
+
+    <h2>5. Comunicación con servicios externos</h2>
+    <p>Las conexiones realizadas por la aplicación ocurren únicamente hacia las direcciones (URLs) que el propio usuario configure.</p>
+    <p>Desarrollos CesarGunn no interviene, monitorea ni almacena el contenido de dichas comunicaciones.</p>
+    <p>El usuario es responsable de utilizar la aplicación únicamente con APIs y servicios para los cuales tenga autorización.</p>
+
+    <h2>6. Compartición de información</h2>
+    <p>Desarrollos CesarGunn no vende, comparte ni transfiere información de los usuarios a terceros.</p>
+
+    <h2>7. Seguridad</h2>
+    <p>La aplicación realiza el procesamiento de la información localmente en el dispositivo del usuario.</p>
+    <p>Aunque se implementan prácticas razonables de seguridad durante el desarrollo de la aplicación, la protección de la información transmitida hacia servicios externos también depende de las medidas implementadas por los servidores con los que el usuario decida comunicarse.</p>
+
+    <h2>8. Menores de edad</h2>
+    <p>La aplicación no está dirigida específicamente a menores de 13 años.</p>
+    <p>No recopilamos información personal de menores.</p>
+
+    <h2>9. Cambios a este Aviso de Privacidad</h2>
+    <p>Este Aviso podrá actualizarse cuando sea necesario para reflejar cambios en la aplicación o en la legislación aplicable.</p>
+    <p>La fecha de la última actualización aparecerá al inicio del documento.</p>
+
+    <h2>10. Contacto</h2>
+    <p>Si tienes preguntas relacionadas con este Aviso de Privacidad puedes comunicarte con nosotros mediante el correo electrónico de soporte publicado en el sitio oficial de Desarrollos CesarGunn.</p>
+
+    <hr>
+    <p style="font-weight:600;">Desarrollos CesarGunn</p>
+    <p style="color:var(--text-secondary);">Todos los derechos reservados.</p>
+
+    <footer>
+        © 2026 Desarrollos CesarGunn — Todos los derechos reservados.
+    </footer>
+</body>
+</html>

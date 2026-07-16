@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desarrollos CesarGunn — Software Engineering Studio</title>
+    <meta name="description" content="Diseñando aplicaciones que combinan rendimiento, simplicidad y experiencias excepcionales.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --bg-alt: #111114;
+            --text: #ffffff;
+            --text-secondary: #8a8a8e;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --border: rgba(255, 255, 255, 0.06);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* ─── Background ─── */
+        .bg-noise {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+        }
+
+        .bg-ambient {
+            position: fixed;
+            z-index: 0;
+            pointer-events: none;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            filter: blur(180px);
+            opacity: 0.06;
+        }
+
+        .bg-ambient-1 {
+            top: -200px;
+            left: -100px;
+            background: var(--accent);
+        }
+
+        .bg-ambient-2 {
+            bottom: -200px;
+            right: -100px;
+            background: var(--accent);
+            opacity: 0.04;
+        }
+
+        .bg-ambient-3 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #6366f1;
+            opacity: 0.03;
+            width: 600px;
+            height: 600px;
+        }
+
+        /* ─── Navbar ─── */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 11, 0.72);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 4rem;
+        }
+
+        .navbar-logo {
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .navbar-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            transition: color 0.25s ease;
+        }
+
+        .navbar-links a:hover {
+            color: var(--text);
+        }
+
+        /* ─── Dropdown ─── */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.6rem;
+            margin-left: 0.25rem;
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-dropdown:hover .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(8px);
+            background: rgba(17, 17, 20, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.5rem;
+            list-style: none;
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 200;
+        }
+
+        .nav-dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(4px);
+        }
+
+        .dropdown-menu li a {
+            display: block;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .dropdown-menu li a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text) !important;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1.25rem 1.5rem;
+            }
+            .navbar.scrolled {
+                padding: 0.9rem 1.5rem;
+            }
+            .navbar-links {
+                gap: 1.25rem;
+            }
+            .navbar-links a {
+                font-size: 0.78rem;
+            }
+        }
+
+        /* ─── Section base ─── */
+        .section {
+            position: relative;
+            z-index: 1;
+            padding: 0 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 0 1.5rem;
+            }
+        }
+
+        /* ─── Hero ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 0;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-tag {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+        }
+
+        .hero-title {
+            font-size: clamp(4rem, 8vw, 7.5rem);
+            font-weight: 700;
+            line-height: 0.92;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        }
+
+        .hero-title span {
+            display: block;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-width: 520px;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .btn-primary:hover {
+            background: #e0e0e0;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ─── Section headers ─── */
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.025em;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ─── Spacer ─── */
+        .spacer {
+            height: 20vh;
+        }
+
+        @media (max-width: 768px) {
+            .spacer {
+                height: 12vh;
+            }
+        }
+
+        /* ─── Apps Section ─── */
+        .apps-section {
+            padding-top: 8rem;
+            padding-bottom: 8rem;
+        }
+
+        .app-project {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .app-project:last-child {
+            border-bottom: none;
+        }
+
+        .app-project.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .app-visual {
+            flex: 1;
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            aspect-ratio: 4/3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .app-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .app-visual-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            color: var(--text-secondary);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .app-visual-placeholder svg {
+            opacity: 0.3;
+        }
+
+        .app-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .app-category {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .app-name {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .app-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            max-width: 420px;
+        }
+
+        .app-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            list-style: none;
+        }
+
+        .app-features li {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            padding: 0.35rem 0.85rem;
+            border-radius: 100px;
+            letter-spacing: -0.01em;
+        }
+
+        .app-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            color: #22c55e;
+            margin-bottom: 1.5rem;
+        }
+
+        .app-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+        .app-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .app-link:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .app-link svg {
+            transition: transform 0.3s ease;
+        }
+
+        .app-link:hover svg {
+            transform: translateX(3px);
+        }
+
+        @media (max-width: 900px) {
+            .app-project,
+            .app-project.reverse {
+                flex-direction: column;
+                gap: 2rem;
+                min-height: auto;
+                padding: 3rem 0;
+            }
+            .app-visual {
+                width: 100%;
+                aspect-ratio: 16/10;
+            }
+        }
+
+        /* ─── About / Manifesto ─── */
+        .about-section {
+            padding-top: 10rem;
+            padding-bottom: 10rem;
+        }
+
+        .manifesto {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .manifesto blockquote {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 500;
+            line-height: 1.4;
+            letter-spacing: -0.015em;
+            color: var(--text);
+            font-style: normal;
+            border: none;
+            padding: 0;
+        }
+
+        .manifesto blockquote p {
+            margin-bottom: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .manifesto blockquote p:last-child {
+            color: var(--text);
+        }
+
+        /* ─── Legal Center ─── */
+        .legal-section {
+            padding-top: 10rem;
+            padding-bottom: 10rem;
+        }
+
+        .legal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .legal-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .legal-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .legal-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.015em;
+            margin-bottom: 1rem;
+        }
+
+        .legal-card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .legal-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .legal-card ul li {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .legal-card ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .legal-card ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .legal-card ul li a:hover {
+            color: var(--text);
+        }
+
+        @media (max-width: 768px) {
+            .legal-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        /* ─── Footer ─── */
+        .footer-section {
+            padding-top: 6rem;
+            padding-bottom: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        .footer-bottom {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+            }
+            .footer-links {
+                gap: 1rem;
+            }
+        }
+
+        /* ─── Scroll reveal ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+        .reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+        .reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background -->
+    <div class="bg-noise"></div>
+    <div class="bg-ambient bg-ambient-1"></div>
+    <div class="bg-ambient bg-ambient-2"></div>
+    <div class="bg-ambient bg-ambient-3"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="navbar-logo">Desarrollos CesarGunn</a>
+        <ul class="navbar-links">
+            <li><a href="#apps">Apps</a></li>
+            <li class="nav-dropdown">
+                <a href="privacy.html">Privacy <span class="dropdown-arrow">▾</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="privacy-paynani.html">Paynani API REST Client</a></li>
+                    <li><a href="privacy-maestro.html">Maestro del Parley</a></li>
+                </ul>
+            </li>
+            <li class="nav-dropdown">
+                <a href="terms.html">Terms <span class="dropdown-arrow">▾</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="terms-paynani.html">Paynani API REST Client</a></li>
+                    <li><a href="terms-maestro.html">Maestro del Parley</a></li>
+                </ul>
+            </li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="#contact">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section hero">
+        <div class="hero-content">
+            <div class="hero-tag">Software Engineering Studio</div>
+            <h1 class="hero-title">
+                <span>DESARROLLOS</span>
+                <span>CESARGUNN</span>
+            </h1>
+            <p class="hero-subtitle">
+                Diseñando aplicaciones que combinan rendimiento, simplicidad y experiencias excepcionales.
+            </p>
+            <div class="hero-actions">
+                <a href="#apps" class="btn btn-primary">Explorar aplicaciones</a>
+                <a href="#about" class="btn btn-secondary">Conocer el estudio</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="spacer"></div>
+
+    <!-- Apps Section -->
+    <section class="section apps-section" id="apps">
+        <div class="section-label reveal">Aplicaciones</div>
+
+        <!-- Paynani API REST Client -->
+        <article class="app-project reveal">
+            <div class="app-visual">
+                <img src="iconpaynani.png" alt="Paynani API REST Client" style="width:100%;height:100%;object-fit:contain;padding:2rem;">
+            </div>
+            <div class="app-info">
+                <div class="app-category">Developer Tools</div>
+                <h2 class="app-name">Paynani API REST Client</h2>
+                <p class="app-description">
+                    Cliente REST completamente nativo para probar APIs HTTP y HTTPS. Compatible con GET, POST, PUT, PATCH, DELETE, Headers, Query Params, Body y múltiples formatos.
+                </p>
+                <ul class="app-features">
+                    <li>Sin registro</li>
+                    <li>Datos en dispositivo</li>
+                    <li>HTTPS nativo</li>
+                    <li>Multi-formato</li>
+                </ul>
+                <div class="app-status">
+                    <span class="app-status-dot"></span> Disponible
+                </div>
+                <a href="paynani.html" class="app-link">
+                    Ver aplicación
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </article>
+
+        <!-- Maestro del Parley -->
+        <article class="app-project reverse reveal">
+            <div class="app-visual">
+                <img src="maestrodelparlay.png" alt="Maestro del Parley" style="width:100%;height:100%;object-fit:contain;padding:2rem;">
+            </div>
+            <div class="app-info">
+                <div class="app-category">Sports</div>
+                <h2 class="app-name">Maestro del Parley</h2>
+                <p class="app-description">
+                    Aplicación deportiva para seguimiento de partidos en vivo, análisis, estadísticas y notificaciones inteligentes.
+                </p>
+                <ul class="app-features">
+                    <li>Predicciones</li>
+                    <li>Resultados</li>
+                    <li>Hot Matches</li>
+                    <li>Ultra Hot</li>
+                    <li>Comunidad</li>
+                    <li>Estadísticas</li>
+                </ul>
+                <div class="app-status">
+                    <span class="app-status-dot"></span> Disponible
+                </div>
+                <a href="maestro-del-parley.html" class="app-link">
+                    Ver aplicación
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </article>
+    </section>
+
+    <div class="spacer"></div>
+
+    <!-- About / Manifesto -->
+    <section class="section about-section" id="about">
+        <div class="manifesto reveal">
+            <div class="section-label" style="text-align:center;">Manifiesto</div>
+            <blockquote>
+                <p>No creemos en crear aplicaciones por cantidad.</p>
+                <p>Construimos herramientas que realmente resuelven problemas.</p>
+                <p>Cada interfaz, animación y línea de código existe por una razón.</p>
+            </blockquote>
+        </div>
+    </section>
+
+    <div class="spacer"></div>
+
+    <!-- Legal Center -->
+    <!-- <section class="section legal-section" id="legal">
+        <div class="section-label reveal" style="text-align:center;margin-bottom:3rem;">Centro Legal</div>
+        <div class="legal-grid">
+            <div class="legal-card reveal reveal-delay-1">
+                <h3>Privacy</h3>
+                <p>Cómo tratamos tu información y qué datos recopilan nuestras aplicaciones.</p>
+                <ul>
+                    <li>Paynani API REST Client</li>
+                    <li>Maestro del Parley</li>
+                    <li>Futuras aplicaciones</li>
+                </ul>
+                <a href="privacy-paynani.html" style="display:inline-flex;align-items:center;gap:0.35rem;color:var(--accent);text-decoration:none;font-size:0.82rem;font-weight:500;margin-top:0.5rem;transition:gap 0.2s;">Política completa <span style="transition:transform 0.2s;">→</span></a>
+            </div>
+            <div class="legal-card reveal reveal-delay-2">
+                <h3>Terms</h3>
+                <p>Términos y condiciones de uso de nuestras aplicaciones y servicios.</p>
+                <ul>
+                    <li>Paynani API REST Client</li>
+                    <li>Maestro del Parley</li>
+                </ul>
+                <a href="terms.html" style="display:inline-flex;align-items:center;gap:0.35rem;color:var(--accent);text-decoration:none;font-size:0.82rem;font-weight:500;margin-top:0.5rem;transition:gap 0.2s;">Términos completos <span style="transition:transform 0.2s;">→</span></a>
+            </div>
+            <div class="legal-card reveal reveal-delay-3">
+                <h3>Support</h3>
+                <p>Asistencia, preguntas frecuentes y canales de contacto.</p>
+                <ul>
+                    <li><a href="support.html#faq">FAQ</a></li>
+                    <li><a href="support.html">Contacto</a></li>
+                    <li><a href="support.html">Reportar errores</a></li>
+                    <li><a href="support.html">Solicitar funciones</a></li>
+                </ul>
+                <a href="support.html" style="display:inline-flex;align-items:center;gap:0.35rem;color:var(--accent);text-decoration:none;font-size:0.82rem;font-weight:500;margin-top:0.5rem;transition:gap 0.2s;">Ir a soporte <span style="transition:transform 0.2s;">→</span></a>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Footer -->
+    <footer class="section footer-section" id="contact">
+        <div class="footer-inner reveal">
+            <div>
+                <div class="footer-logo">Desarrollos CesarGunn</div>
+                <div class="footer-bottom">cesar.gonzalez.p.25@gmail.com</div>
+            </div>
+            <ul class="footer-links">
+                <li><a href="#apps">Apps</a></li>
+                <li><a href="privacy.html">Privacy</a></li>
+                <li><a href="terms.html">Terms</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="#contact">Contacto</a></li>
+            </ul>
+            <div class="footer-bottom">© 2026 Desarrollos CesarGunn</div>
+        </div>
+    </footer>
+
+    <script>
+        // ─── Navbar scroll effect ───
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // ─── Scroll reveal ───
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ─── Smooth parallax for ambient lights ───
+        const ambient1 = document.querySelector('.bg-ambient-1');
+        const ambient2 = document.querySelector('.bg-ambient-2');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+            if (ambient1) {
+                ambient1.style.transform = `translateY(${scrollY * 0.03}px)`;
+            }
+            if (ambient2) {
+                ambient2.style.transform = `translateY(${-scrollY * 0.02}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
